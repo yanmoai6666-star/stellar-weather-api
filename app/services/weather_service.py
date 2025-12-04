@@ -131,10 +131,10 @@ class WeatherService:
         """获取天气数据，如果数据库中没有则从API获取"""
         # 先从数据库获取
         weather = self.get_weather_by_city(city)
-        
+        settings = Settings()
         # 如果数据库中没有，或者数据超过1小时，则从API获取
         if not weather or (
-            datetime.utcnow() - weather.updated_at.replace(tzinfo=None) > timedelta(hours=1)
+            datetime.utcnow() - weather.updated_at.replace(tzinfo=None) > timedelta(minutes=settings.WEATHER_CACHE_TTL_MINUTES)
         ):
             api_data = self.fetch_weather_from_api(city)
             if api_data:
