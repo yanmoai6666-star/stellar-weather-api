@@ -62,8 +62,23 @@ class TestWeatherService:
         should_update = service._should_update(fresh_weather)
         
         assert should_update is False
+        
+    def test_weather_cache_ttl_custom(self):
+        # 测试自定义天气缓存时长
+        settings = Settings()
+        settings.WEATHER_CACHE_TTL_MINUTES = 5  # 自定义5分钟
+        service = WeatherService()
+        cache_expire = timedelta(minutes=settings.WEATHER_CACHE_TTL_MINUTES)
+        assert cache_expire == timedelta(minutes=5)
 
-
+    def test_horoscope_cache_ttl_custom(self):
+        # 测试自定义星象缓存时长
+        settings = Settings()
+        settings.HOROSCOPE_CACHE_TTL_DAYS = 2  # 自定义2天
+        service = HoroscopeService()
+        cache_expire = timedelta(days=settings.HOROSCOPE_CACHE_TTL_DAYS)
+        assert cache_expire == timedelta(days=2)
+    
 class TestHoroscopeService:
     """星象服务测试类"""
     
@@ -116,3 +131,4 @@ class TestHoroscopeService:
         should_update = service._should_update(fresh_horoscope)
         
         assert should_update is False
+
