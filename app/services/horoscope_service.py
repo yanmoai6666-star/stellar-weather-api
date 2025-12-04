@@ -8,7 +8,6 @@ from app.models.horoscope import Horoscope
 from app.schemas.horoscope import HoroscopeCreate, HoroscopeUpdate
 from app.utils.config import settings
 
-
 class HoroscopeService:
     """星象服务类，处理星象数据的获取和业务逻辑"""
     
@@ -105,10 +104,10 @@ class HoroscopeService:
         """获取星象数据，如果数据库中没有则从API获取"""
         # 先从数据库获取
         horoscope = self.get_horoscope_by_sign(sign)
-        
+        settings = Settings()
         # 如果数据库中没有，或者数据超过1天，则从API获取
         if not horoscope or (
-            datetime.utcnow() - horoscope.updated_at.replace(tzinfo=None) > timedelta(days=1)
+            datetime.utcnow() - horoscope.updated_at.replace(tzinfo=None) > timedelta(days=settings.HOROSCOPE_CACHE_TTL_DAYS)
         ):
             api_data = self.fetch_horoscope_from_api(sign)
             if api_data:
