@@ -27,7 +27,10 @@ class Settings(BaseSettings):
     
     # 日志配置
     LOG_LEVEL: str = "INFO"
-    
+
+    WEATHER_CACHE_TTL_MINUTES: int = 60  # 天气缓存默认60分钟
+    HOROSCOPE_CACHE_TTL_DAYS: int = 1    # 星象缓存默认1天
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
